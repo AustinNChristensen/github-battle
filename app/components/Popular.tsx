@@ -5,14 +5,14 @@ var api = require('../utils/api');
 export interface IProps {}
 export interface IState {
     selectedLanguage: string,
-    repos: Array<any>
+    repos: any
 }
 export interface ILanguageProps {
     selectedLanguage: string,
     onSelect(language: string): void
 }
 interface IRepoGridProps {
-    repos: Array<any>
+    repos: any
 }
 
 
