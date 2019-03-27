@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 var api = require('../utils/api');
+var Loading = require('./Loading');
 
 export interface IProps {}
 export interface IState {
@@ -99,7 +100,7 @@ export default class Popular extends React.Component <IProps, IState> {
                     onSelect={this.updateLanguage}
                 />
                 {!this.state.repos
-                    ? <p>LOADING</p>
+                    ? <Loading />
                     : <RepoGrid repos={this.state.repos} />
                 }
                 
