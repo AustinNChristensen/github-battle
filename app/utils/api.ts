@@ -1,20 +1,19 @@
-const axios = require('axios');
-
 const id: string = "a12700a97924bd4633c3" // YOUR_CLIENT_ID
 const sec: string = "56ac23ebdcb969d213f4ddd882664b41bf0f57fe" // YOUR_SECRET_ID
 const params: string = `?client_id=${id}&client_secret=${sec}`;
 
 async function getProfile(username: string): any{
-    const profile = await axios.get(`https://api.github.com/users/${username}${params}`)
-    return profile.data
+    const response = await fetch(`https://api.github.com/users/${username}${params}`)
+    return response.json();
 }
 
-function getRepos(username: string): any {
-    return axios.get(`https://api.github.com/users/${username}/repos${params}`);
+async function getRepos(username: string): any {
+    const response = await fetch(`https://api.github.com/users/${username}/repos${params}`);
+    return response.json();
 }
 
 function getStarCount (repos: any): number {
-    return repos.data.reduce((count: number, {stargazers_count}: any) => count + stargazers_count ,0)
+    return repos.reduce((count: number, {stargazers_count}: any) => count + stargazers_count ,0)
 }
 
 function calculateScore({followers}: any, repos: any): number{
@@ -53,7 +52,8 @@ export async function battle (players: Array<any>) {
 
 export async function fetchPopularRepos (language: string) {
     const encodedURI = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`);
-    const repos = await axios.get(encodedURI)
+    const response = await fetch(encodedURI)
         .catch(handleError);
-    return repos.data.items;
+    const repos = await response.json();
+    return repos.items;
 }
