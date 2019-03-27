@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-var api = require('../utils/api');
-var Loading = require('./Loading');
+const api = require('../utils/api');
+const Loading = require('./Loading');
 
 export interface IProps {}
 export interface IState {
@@ -17,43 +17,38 @@ interface IRepoGridProps {
 }
 
 
-function RepoGrid (props: IRepoGridProps) {
+function RepoGrid ({repos}: IRepoGridProps) {
     return (
         <ul className='popular-list'>
-            {props.repos.map(function(repo: any, index: number){
-                return(
-                    <li key={repo.name} className='popular-item'>
-                        <div className='popular-rank'>#{index + 1}</div>
-                        <ul className='space-list-items'>
-                            <li>
-                                <img className='avatar' src={repo.owner.avatar_url} alt={'avatar for ' + repo.owner.login } />
-                            </li>
-                            <li><a href={repo.html_url}>{repo.name}</a></li>
-                            <li>@{repo.owner.login}</li>
-                            <li>{repo.stargazers_count} stars</li>
-                        </ul>
-                    </li>
-                )
-            })}
+            {repos.map(({name, stargazers_count, owner, html_url}: any, index: number) => (
+                <li key={name} className='popular-item'>
+                    <div className='popular-rank'>#{index + 1}</div>
+                    <ul className='space-list-items'>
+                        <li>
+                            <img className='avatar' src={owner.avatar_url} alt={`avatar for ${owner.login}`} />
+                        </li>
+                        <li><a href={html_url}>{name}</a></li>
+                        <li>@{owner.login}</li>
+                        <li>{stargazers_count} stars</li>
+                    </ul>
+                </li>
+            ))}
         </ul>
     )
-
 }
 
-function SelectedLanguage(props: ILanguageProps) {
-    var languages = ['All', 'Javascript', 'Ruby', 'Java', 'CSS', 'Python'];
+function SelectedLanguage({selectedLanguage, onSelect}: ILanguageProps) {
+    const languages = ['All', 'Javascript', 'Ruby', 'Java', 'CSS', 'Python'];
     return(
         <ul className='languages'>
-            {languages.map(function (lang: string){
-                return (
-                    <li 
-                    style={lang === props.selectedLanguage ? {color:  '#d0021b'} : null}
-                    key={lang} 
-                    onClick={props.onSelect.bind(null, lang)}>
-                    {lang}
-                    </li>
-                )
-            })}
+            {languages.map((lang: string) => (
+                <li 
+                style={lang === selectedLanguage ? {color: '#d0021b'} : null}
+                key={lang} 
+                onClick={() => onSelect.bind(lang)}>
+                {lang}
+                </li>
+            ))}
         </ul>
     )
 }
@@ -75,37 +70,30 @@ export default class Popular extends React.Component <IProps, IState> {
     }
 
     updateLanguage(lang: string){
-        this.setState(function () {
-            return {
+        this.setState(() => ({
                 selectedLanguage: lang,
                 repos: null
-            }
-        });
+        }));
 
         api.fetchPopularRepos(lang)
-            .then(function (repos: Array<any>) {
-                this.setState(function () {
-                    return {
-                        repos: repos
-                    }
-                })
-            }.bind(this));
+            .then((repos: Array<any>) => {
+                this.setState(() => ({ repos }))
+            });
     }
     
     render(){
+        const { selectedLanguage, repos } = this.state; 
         return(
             <div>
                 <SelectedLanguage 
-                    selectedLanguage={this.state.selectedLanguage} 
+                    selectedLanguage={selectedLanguage} 
                     onSelect={this.updateLanguage}
                 />
-                {!this.state.repos
+                {!repos
                     ? <Loading />
-                    : <RepoGrid repos={this.state.repos} />
+                    : <RepoGrid repos={repos} />
                 }
-                
             </div>
         )
-
     }
 }
