@@ -1,5 +1,3 @@
-import { instanceOf } from "prop-types";
-
 var React = require('react');
 var queryString = require('query-string');
 var api = require('../utils/api');
