@@ -48,26 +48,25 @@ export default class Results extends React.Component <any, IResultsState> {
         loading: true
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         const {playerOneName, playerTwoName }: any = queryString.parse(this.props.location.search);
-        battle([
-            playerOneName,
-            playerTwoName
-        ]).then((results: any) => {
-            if (results === null){
-                return this.setState(() =>({
-                        error: 'looks like there was an error. Check that users exist',
-                        loading: false
-                    }));
-            }
-            this.setState(() => ({
-                    error: null,
-                    winner: results[0],
-                    loser: results[1],
+        
+        const players = await battle([playerOneName, playerTwoName]);
+        
+        if (players === null){
+            return this.setState(() =>({
+                    error: 'looks like there was an error. Check that users exist',
                     loading: false
                 }));
-            console.log(results);
-        });
+        }
+        this.setState(() => ({
+                error: null,
+                winner: players[0],
+                loser: players[1],
+                loading: false
+            }));
+        console.log(players);
+
     }
     render() {
         const { error, winner, loser, loading } = this.state;

@@ -4,9 +4,9 @@ const id: string = "a12700a97924bd4633c3" // YOUR_CLIENT_ID
 const sec: string = "56ac23ebdcb969d213f4ddd882664b41bf0f57fe" // YOUR_SECRET_ID
 const params: string = `?client_id=${id}&client_secret=${sec}`;
 
-function getProfile(username: string): any{
-    return axios.get(`https://api.github.com/users/${username}${params}`)
-        .then(( {data}: any) => data );
+async function getProfile(username: string): any{
+    const profile = await axios.get(`https://api.github.com/users/${username}${params}`)
+    return profile.data
 }
 
 function getRepos(username: string): any {
@@ -18,7 +18,7 @@ function getStarCount (repos: any): number {
 }
 
 function calculateScore({followers}: any, repos: any): number{
-    return (followers * 3) + getStarCount(repos);
+    return (followers * 1) + getStarCount(repos);
 }
 
 function handleError(error: any): null{
@@ -26,28 +26,34 @@ function handleError(error: any): null{
     return null
 }
 
-function getUserData (player: any) {
-    return Promise.all([
-        getProfile(player),
+async function getUserData (player: any) {
+    const [ profile, repos ] = await Promise.all([
+        getProfile(player), 
         getRepos(player)
-    ]).then(([ profile, repos ]: any) => ({
-            profile,
-            score: calculateScore(profile,repos)
-    }));
+    ]);
+    return {
+        profile,
+        score: calculateScore(profile,repos)
+    }
 }
 
 function sortPlayers (players: any) {
     return players.sort((a: any, b: any) => b.score - a.score );
 }
 
-export function battle (players: Array<any>) {
-    return Promise.all(players.map(getUserData))
-    .then(sortPlayers)
-    .catch(handleError)
+export async function battle (players: Array<any>) {
+        const results = await Promise.all(players.map(getUserData))
+            .catch(handleError);
+        
+        return results === null
+        ? results
+        : sortPlayers(results)
+
 }
 
-export function fetchPopularRepos (language: string) {
+export async function fetchPopularRepos (language: string) {
     const encodedURI = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`);
-    return axios.get(encodedURI)
-        .then(({data}: any) => data.items );
+    const repos = await axios.get(encodedURI)
+        .catch(handleError);
+    return repos.data.items;
 }
