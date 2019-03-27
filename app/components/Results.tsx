@@ -5,8 +5,8 @@ import {Link} from 'react-router-dom';
 import PlayerPreview from './PlayerPreview';
 import Loading from './Loading';
 interface IResultsState {
-    winner: any,
-    loser: any,
+    winner: string | null,
+    loser: any | null,
     error: any,
     loading: boolean
 }
@@ -41,15 +41,13 @@ function Player ({label, score, profile}: any) {
 
 
 export default class Results extends React.Component <any, IResultsState> {
-    constructor(props: any){
-        super(props);
-        this.state = {
-            winner: null,
-            loser: null,
-            error: null,
-            loading: true
-        }
+    state: IResultsState = {
+        winner: null,
+        loser: null,
+        error: null,
+        loading: true
     }
+
     componentDidMount(){
         const {playerOneName, playerTwoName }: any = queryString.parse(this.props.location.search);
         battle([

@@ -10,14 +10,20 @@ const styles = {
 interface ILoadingProps {
     speed: number,
     text: string
-
 }
-export default class Loading extends React.Component <any, any> {
-    constructor(props: any){
-        super(props);
-        this.state = {
-            text: props.text
-        };
+
+interface ILoadingState {
+    text: string
+}
+
+export default class Loading extends React.Component <ILoadingProps, ILoadingState> {
+    state: ILoadingState = {
+        text: this.props.text
+    }
+
+    static defaultProps = {
+        text: 'Loading',
+        speed: 300
     }
 
     componentDidMount(){
@@ -43,9 +49,4 @@ export default class Loading extends React.Component <any, any> {
             </p>
         )
     }
-}
-
-Loading.defaultProps = {
-    text: 'Loading',
-    speed: 300
 }

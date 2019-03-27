@@ -8,8 +8,8 @@ interface IBattleProps {}
 interface IBattleState {
     playerOneName: string,
     playerTwoName: string,
-    playerOneImage: string,
-    playerTwoImage: string
+    playerOneImage: string | null,
+    playerTwoImage: string | null
 }
 
 interface IPlayerInputProps {
@@ -23,20 +23,19 @@ interface IPlayerInputState {
 }
 
 class PlayerInput extends React.Component <IPlayerInputProps, IPlayerInputState> {
-    constructor(props: IPlayerInputProps){
-        super(props);
-        this.state = {
-            username: ''
-        }
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+    state = {
+        username: ''
     }
 
-    handleChange(event: any){
+    static defaultProps = {
+        label: 'Username'
+    }
+
+    handleChange = (event: any) => {
         const value = event.target.value;
         this.setState(() => ({username: value}))
     }
-    handleSubmit(event: any){
+    handleSubmit = (event: any) => {
         event.preventDefault();
         this.props.onSubmit(this.props.id, this.state.username)
     }
@@ -72,26 +71,21 @@ class PlayerInput extends React.Component <IPlayerInputProps, IPlayerInputState>
 
 
 export default class Battle extends React.Component <IBattleProps, IBattleState> {
-    constructor(props: IBattleProps){
-        super(props);
-        this.state = {
-            playerOneName: "",
-            playerTwoName: "",
-            playerOneImage: null,
-            playerTwoImage: null
-        }
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleReset = this.handleReset.bind(this);
+    state: IBattleState = {
+        playerOneName: "",
+        playerTwoName: "",
+        playerOneImage: null,
+        playerTwoImage: null
     }
 
-    handleSubmit(id: string, username: string){
+    handleSubmit = (id: string, username: string): void => {
         this.setState(() => ({
             [id + 'Name']: username,
             [id + 'Image']: `https://github.com/${username}.png?size=200`
         }));
     }
 
-    handleReset(id: string):any{
+    handleReset = (id: string): void => {
         this.setState(() => ({
             [id + 'Name']: '',
             [id + 'Image']: null

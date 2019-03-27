@@ -4,7 +4,7 @@ import Loading from './Loading';
 export interface IProps {}
 export interface IState {
     selectedLanguage: string,
-    repos: any
+    repos: any | null
 }
 export interface ILanguageProps {
     selectedLanguage: string,
@@ -56,26 +56,23 @@ function RepoGrid ({ repos }: any) {
 
 
 export default class Popular extends React.Component <IProps, IState>{
-  constructor(props: IProps) {
-    super();
-    this.state = {
-      selectedLanguage: 'All',
-      repos: null,
-    };
-
-    this.updateLanguage = this.updateLanguage.bind(this);
+  state: IState = {
+    selectedLanguage: 'All',
+    repos: null
   }
+
   componentDidMount() {
     this.updateLanguage(this.state.selectedLanguage)
   }
-  updateLanguage(lang: string) {
+  
+  updateLanguage = (lang: string) => {
     this.setState(() => ({
       selectedLanguage: lang,
       repos: null
     }));
 
-    fetchPopularRepos(lang)
-      .then((repos) => this.setState(() => ({ repos })));
+  fetchPopularRepos(lang)
+    .then((repos: any) => this.setState(() => ({ repos })));
   }
   render() {
     const { selectedLanguage, repos } = this.state
