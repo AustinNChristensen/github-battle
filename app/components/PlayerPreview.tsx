@@ -1,4 +1,4 @@
-var React = require('react');
+import * as  React from 'react';
 
 interface IPlayerPreviewProps {
     avatar: string,
@@ -6,19 +6,18 @@ interface IPlayerPreviewProps {
     children: any
 }
 
-function PlayerPreview (props: IPlayerPreviewProps) {
+export default function PlayerPreview ({avatar, username, children}: IPlayerPreviewProps) {
     return (
         <div>
             <div className='column'>
                 <img 
                     className='avatar'
-                    src={props.avatar}
-                    alt={'Avatar for ' + props.username} 
+                    src={avatar}
+                    alt={'Avatar for ' + username} 
                 />
-                <h2 className='username'>@{props.username}</h2>
+                <h2 className='username'>@{username}</h2>
             </div>
-            {props.children}
+            {children}
         </div>
     )
 }
-module.exports = PlayerPreview;

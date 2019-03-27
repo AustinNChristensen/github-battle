@@ -40,17 +40,14 @@ function sortPlayers (players: any) {
     return players.sort((a: any, b: any) => b.score - a.score );
 }
 
+export function battle (players: Array<any>) {
+    return Promise.all(players.map(getUserData))
+    .then(sortPlayers)
+    .catch(handleError)
+}
 
-module.exports = {
-    battle: (players: Array<any>) => {
-        return Promise.all(players.map(getUserData))
-            .then(sortPlayers)
-            .catch(handleError)
-    },
-
-    fetchPopularRepos: (language: string) => {
-        const encodedURI = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`);
-        return axios.get(encodedURI)
-            .then(({data}: any) => data.items );
-    }
+export function fetchPopularRepos (language: string) {
+    const encodedURI = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`);
+    return axios.get(encodedURI)
+        .then(({data}: any) => data.items );
 }

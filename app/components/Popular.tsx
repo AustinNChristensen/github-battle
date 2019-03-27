@@ -1,6 +1,6 @@
 import * as React from 'react';
-const api = require('../utils/api');
-const Loading = require('./Loading');
+import { fetchPopularRepos } from '../utils/api';
+import Loading from './Loading';
 export interface IProps {}
 export interface IState {
     selectedLanguage: string,
@@ -74,7 +74,7 @@ export default class Popular extends React.Component <IProps, IState>{
       repos: null
     }));
 
-    api.fetchPopularRepos(lang)
+    fetchPopularRepos(lang)
       .then((repos) => this.setState(() => ({ repos })));
   }
   render() {
@@ -92,5 +92,3 @@ export default class Popular extends React.Component <IProps, IState>{
     )
   }
 }
-
-// module.exports = Popular;

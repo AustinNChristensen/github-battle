@@ -1,9 +1,9 @@
-const React = require('react');
-const queryString = require('query-string');
-const api = require('../utils/api');
-const Link = require('react-router-dom').Link;
-const PlayerPreview = require('./PlayerPreview');
-const Loading = require('./Loading');
+import * as React from 'react';
+import queryString from 'query-string';
+import { battle } from '../utils/api';
+import {Link} from 'react-router-dom';
+import PlayerPreview from './PlayerPreview';
+import Loading from './Loading';
 interface IResultsState {
     winner: any,
     loser: any,
@@ -40,7 +40,7 @@ function Player ({label, score, profile}: any) {
 }
 
 
-class Results extends React.Component <any, IResultsState> {
+export default class Results extends React.Component <any, IResultsState> {
     constructor(props: any){
         super(props);
         this.state = {
@@ -52,7 +52,7 @@ class Results extends React.Component <any, IResultsState> {
     }
     componentDidMount(){
         const {playerOneName, playerTwoName }: any = queryString.parse(this.props.location.search);
-        api.battle([
+        battle([
             playerOneName,
             playerTwoName
         ]).then((results: any) => {
@@ -100,4 +100,3 @@ class Results extends React.Component <any, IResultsState> {
         )
     }
 }
-module.exports = Results;

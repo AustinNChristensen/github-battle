@@ -1,5 +1,5 @@
 import * as React from 'react';
-var ReactDOM = require('react-dom');
+import ReactDOM from 'react-dom';
 require('./styles/index.css');
 import App  from "./components/App";
 

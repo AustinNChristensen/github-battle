@@ -1,5 +1,4 @@
-const React = require('react');
-
+import * as React from 'react';
 
 const styles = {
     content: {
@@ -13,7 +12,7 @@ interface ILoadingProps {
     text: string
 
 }
-class Loading extends React.Component <any, any> {
+export default class Loading extends React.Component <any, any> {
     constructor(props: any){
         super(props);
         this.state = {
@@ -50,4 +49,3 @@ Loading.defaultProps = {
     text: 'Loading',
     speed: 300
 }
-module.exports = Loading;

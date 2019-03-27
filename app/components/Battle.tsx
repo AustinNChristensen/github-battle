@@ -1,6 +1,6 @@
-const React = require('react');
-const Link = require('react-router-dom').Link;
-const PlayerPreview = require('./PlayerPreview');
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+import PlayerPreview from './PlayerPreview';
 
 
 interface IBattleProps {}
@@ -71,7 +71,7 @@ class PlayerInput extends React.Component <IPlayerInputProps, IPlayerInputState>
 }
 
 
-class Battle extends React.Component <IBattleProps, IBattleState> {
+export default class Battle extends React.Component <IBattleProps, IBattleState> {
     constructor(props: IBattleProps){
         super(props);
         this.state = {
@@ -160,5 +160,3 @@ class Battle extends React.Component <IBattleProps, IBattleState> {
         )
     }
 }
-
-module.exports = Battle;
